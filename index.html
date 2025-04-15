@@ -1,3 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is Your AAC App Slow or Glitching? - Device Support Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary-bg: #f8f9fa;
+            --text-color: #333;
+            --header-bg: #055293; /* Keeping the blue header */
+            --header-text: #ffffff;
+            --active-color: #198754; /* Green */
+            --warning-color: #ffc107; /* Yellow */
+            --danger-color: #dc3545;  /* Red */
+            --info-color: #0d6efd;    /* Blue for Discontinued but Supported */
+            --info-bg-light: #cfe2ff; /* Light blue bg for badge */
+            --info-text-dark: #052c65;/* Dark blue text for badge */
+            --new-color: #6f42c1;     /* Purple */
+            --card-bg: #ffffff;
+            --border-color: #dee2e6;
+            --focus-outline: #0d6efd;
+            --font-main: 'Source Sans 3', sans-serif;
+            --border-radius: 8px;
+            --shadow-soft: 0 3px 6px rgba(0,0,0,0.07);
+        }
+
+        /* High contrast mode */
+        @media (prefers-contrast: more) {
+            :root {
+                --primary-bg: #ffffff;
+                --text-color: #000000;
+                --header-bg: #000000;
+                --header-text: #ffffff;
+                --active-color: #007700;
+                --warning-color: #000000;
+                --danger-color: #cc0000;
+                --info-color: #0000ff; /* Bright Blue */
+                --info-bg-light: #add8e6; /* Light Blue bg */
+                --info-text-dark: #000000; /* Black text */
+                --new-color: #5500aa;
+                --card-bg: #ffffff;
+                --border-color: #000000;
+                --focus-outline: #0000ff;
+                --shadow-soft: none;
+            }
+             .badge-warning { color: white; background-color: #b38000; }
+             .badge-discontinued { background-color: var(--info-bg-light); color: var(--info-text-dark); border-color: var(--info-color); }
+             .alert-box.alert-info-light { background-color: #e0e0e0; border-left-color: #000000; color: #000000; }
+             .alert-box.alert-info-light h4 { color: #000000; }
+             .info-box { background-color: #e0e0e0; border-left-color: #000000; color: #000000;}
+             .info-box h4 { color: #000000; }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-main); line-height: 1.65; color: var(--text-color);
+            background-color: var(--primary-bg); margin: 0; padding: 0; font-size: 19px;
+        }
+
+        .visually-hidden {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 25px; }
+        header {
+            background-color: var(--header-bg); color: var(--header-text);
+            padding: 35px 0; margin-bottom: 20px; text-align: center;
+        }
+        main { padding: 1px 0; }
+
+        h1 { font-size: 2.4rem; margin-bottom: 10px; font-weight: 700; }
+        h2 { font-size: 2rem; margin: 40px 0 25px 0; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; font-weight: 600; }
+        h3 { font-size: 1.6rem; margin: 30px 0 20px 0; font-weight: 600; }
+        h4 { font-size: 1.3rem; margin: 20px 0 12px 0; font-weight: 600; }
+
+        p { margin-bottom: 18px; }
+        ul { margin-bottom: 18px; padding-left: 35px; }
+        li { margin-bottom: 8px; }
+
+        .intro-text {
+            font-size: 1.2rem; margin-bottom: 30px; max-width: 800px;
+            margin-left: auto; margin-right: auto; text-align: center;
+        }
+
+        /* Alert Box Styling */
+        .alert-box {
+            padding: 20px 25px; margin: 25px 0; border-radius: var(--border-radius);
+            border-left-width: 5px; border-left-style: solid;
+        }
+        .alert-box.alert-info-light { /* Specific class for the lighter "Why Updates Matter" box */
+             background-color: #e3f2fd; border-left-color: #6caedb; color: #334;
+             font-size: 0.95em;
+        }
+         .alert-box.alert-warning {
+             background-color: #fff3cd; border-left-color: var(--warning-color); color: #664d03;
+         }
+         .alert-box.alert-info {
+             background-color: #cfe2ff; border-left-color: var(--info-color); color: var(--info-text-dark);
+         }
+        .alert-box h3, .alert-box h4 {
+            margin-top: 0; font-size: 1.3rem; margin-bottom: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;
+        }
+         .alert-box.alert-info-light h4 { color: #1e5f8a; }
+         .alert-box.alert-warning h3 { color: #664d03; font-size: 1.6rem; }
+         .alert-box.alert-info h3 { color: var(--info-text-dark); font-size: 1.6rem; }
+        .alert-box ul { padding-left: 25px; }
+        .alert-box li { font-size: 0.95em; }
+
+
+        /* Device Table */
+        .device-table {
+            width: 100%; border-collapse: collapse; margin: 30px 0;
+            box-shadow: var(--shadow-soft); border-radius: var(--border-radius); overflow: hidden;
+        }
+        .device-table th {
+            background-color: var(--header-bg); color: var(--header-text); text-align: left;
+            padding: 18px 22px; font-weight: 600;
+        }
+        .device-table td {
+            padding: 18px 22px; border-bottom: 1px solid var(--border-color);
+            background-color: var(--card-bg); vertical-align: middle;
+        }
+        /* Apply border to first actual data cell, not header cells if thead used */
+        .device-table tbody td:first-child {
+            padding-left: calc(22px - 5px); /* Adjust padding to align text */
+        }
+        .device-table tr:last-child td { border-bottom: none; }
+        .device-table tr:nth-child(even) td { background-color: rgba(0,0,0,0.02); }
+        .device-table strong { font-weight: 600; }
+
+        /* Row Highlighting */
+        .status-active td:first-child { border-left: 5px solid var(--active-color); }
+        .status-warning td:first-child { border-left: 5px solid var(--warning-color); }
+        .status-end td:first-child { border-left: 5px solid var(--danger-color); }
+        .status-discontinued td:first-child { border-left: 5px solid var(--info-color); }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px;
+            border-radius: 30px; font-weight: 600; font-size: 0.95rem; text-align: center;
+            min-width: 190px; line-height: 1.3; border: 1px solid transparent;
+        }
+        .badge-active { background-color: var(--active-color); color: white; border-color: var(--active-color); }
+        .badge-warning { background-color: var(--warning-color); color: #333; border-color: #d9a406;}
+        .badge-end { background-color: var(--danger-color); color: white; border-color: var(--danger-color); }
+        .badge-discontinued {
+            background-color: var(--info-bg-light); border-color: var(--info-color); color: var(--info-text-dark);
+        }
+        .status-badge .fa-solid { font-size: 1em; }
+         .badge-warning .fa-triangle-exclamation { color: #856404; }
+         .badge-discontinued .fa-info-circle { color: var(--info-text-dark); }
+         @media (prefers-contrast: more) {
+            .badge-warning .fa-triangle-exclamation { color: white; }
+            .badge-discontinued .fa-info-circle { color: #000; }
+         }
+
+
+        .status-new:after {
+            content: "NEW"; display: inline-block; background-color: var(--new-color); color: white;
+            font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 20px;
+            margin-left: 10px; vertical-align: middle;
+        }
+
+        /* Tabs */
+        .tabs { margin: 40px 0; }
+        .tab-buttons {
+            display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 0;
+            border-bottom: 2px solid var(--border-color); padding-bottom: 0;
+        }
+        .tab-button {
+            padding: 15px 30px; background-color: #e9ecef; border: 1px solid transparent;
+            border-bottom: none; border-radius: var(--border-radius) var(--border-radius) 0 0;
+            cursor: pointer; font-weight: 600; font-size: 1.2rem; color: var(--header-bg);
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+            margin-bottom: -2px;
+        }
+        .tab-button:hover { background-color: #d3d9df; }
+        .tab-button.active, .tab-button[aria-selected="true"] {
+            background-color: var(--card-bg); color: var(--header-bg);
+            border-color: var(--border-color) var(--border-color) var(--card-bg);
+        }
+
+        /* Focus Indicators */
+        .tab-button:focus-visible, .search-box input:focus-visible, footer a:focus-visible, .info-box a:focus-visible {
+             outline: 3px solid var(--focus-outline); outline-offset: 3px; box-shadow: none;
+             border-radius: 4px;
+        }
+        .search-box input:focus-visible { border-color: var(--focus-outline); }
+
+        .tab-content {
+            display: none; padding: 30px 20px; background-color: var(--card-bg);
+            border: 2px solid var(--border-color); border-top: none;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            box-shadow: var(--shadow-soft);
+        }
+        .tab-content.active { display: block; }
+
+        /* Legend */
+        .legend {
+            display: flex; flex-wrap: wrap; gap: 25px; margin: 30px 0 40px 0;
+            padding: 20px 25px; background-color: var(--card-bg);
+            border-radius: var(--border-radius); box-shadow: var(--shadow-soft); justify-content: center;
+        }
+        .legend-item { display: flex; align-items: center; gap: 12px; }
+        .legend-color {
+            width: 28px; height: 28px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9em;
+        }
+        .legend-active { background-color: var(--active-color); }
+        .legend-warning { background-color: var(--warning-color); color: #333; }
+        .legend-end { background-color: var(--danger-color); }
+        .legend-discontinued { /* Updated Style */
+            background-color: var(--info-bg-light); border: 1px solid var(--info-color);
+            color: var(--info-text-dark);
+        }
+         @media (prefers-contrast: more) { .legend-warning { color: white; } }
+
+
+        /* Search Box */
+        .search-box { margin: 40px 0; display: flex; gap: 10px; }
+        .search-box input {
+            flex: 1; padding: 16px 20px; border: 2px solid var(--border-color);
+            border-radius: var(--border-radius); font-size: 1.1rem; min-width: 200px; font-family: var(--font-main);
+        }
+        .search-box input:focus { border-color: var(--header-bg); outline: none; }
+
+        /* Info Box (Used in Accessibility Tab) */
+        .info-box {
+            background-color: #eef1f5; border-left: 5px solid #4a6a8a; padding: 25px 30px;
+            margin: 25px 0 35px 0; border-radius: var(--border-radius); box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .info-box h4 {
+            color: #2c3e50; margin-top: 0; margin-bottom: 15px; font-size: 1.4rem;
+            display: flex; align-items: center; gap: 10px;
+        }
+         .info-box h4 .fa-solid { color: var(--header-bg); font-size: 1.1em; }
+        .info-box p, .info-box ul { color: #34495e; }
+        .info-box strong { font-weight: 600; color: #1a237e; }
+        .info-box ul { padding-left: 25px; } /* Ensure padding for lists inside */
+
+
+        /* Footer */
+        footer {
+            text-align: center; padding: 45px 0; margin-top: 60px;
+            background-color: var(--header-bg); color: var(--header-text);
+        }
+        footer p { margin: 10px 0; font-size: 1rem; }
+        footer a { color: white; text-decoration: underline; font-weight: 600;}
+        footer a:hover { text-decoration: none; }
+
+        .hidden { display: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+             body { font-size: 18px; }
+            .container { padding: 15px; }
+            h1 { font-size: 1.9rem; }
+            h2 { font-size: 1.7rem; }
+            h3 { font-size: 1.4rem; }
+            h4 { font-size: 1.2rem; }
+
+            .device-table { font-size: 0.95rem; box-shadow: none; border-radius: 0;}
+            .device-table th, .device-table td { padding: 14px 12px; }
+             .device-table tbody td:first-child { padding-left: calc(12px - 5px); }
+            .status-badge { padding: 8px 12px; font-size: 0.85rem; min-width: auto; gap: 5px; }
+            .status-badge span { display: inline; }
+
+
+            .tab-button { padding: 12px 15px; font-size: 1rem; flex-grow: 1; text-align: center; }
+            .tab-buttons { border-bottom: 2px solid var(--border-color); gap: 5px;}
+            .tab-content { border-radius: 0; border: none; box-shadow: none; padding: 20px 10px; background: none;}
+             .tab-button.active { border: 2px solid var(--border-color); border-bottom-color: var(--primary-bg); }
+
+            .search-box { flex-direction: column; margin: 30px 0; }
+            .legend { gap: 15px; padding: 15px; flex-direction: column; align-items: flex-start;}
+            .legend-item { font-size: 0.9rem; }
+            .legend-color { width: 22px; height: 22px; }
+
+            .info-box { padding: 20px 20px; }
+            .alert-box { padding: 20px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>AAC Device Support Guide</h1>
+            <p>Is Your App Slow or Glitching? Check Your Device Status!</p>
+             <p style="font-size: 0.9em; opacity: 0.9;"><em>Information current as of April 15, 2025</em></p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+
+             <div class="alert-box alert-info-light">
+                <h4><i class="fa-solid fa-circle-question"></i> Why Device Updates Matter Briefly</h4>
+                <p>Older devices stop receiving updates, which can cause AAC apps to run slowly, crash, or lose features. Keeping your device updated ensures smoother operation and security.</p>
+             </div>
+
+            <div class="intro-text">
+                <p>Use this guide to check if your communication device (iPad, Android Tablet, etc.) is still supported and likely to run your AAC apps well.</p>
+            </div>
+
+            <h2><i class="fa-solid fa-key"></i> Device Status Legend</h2>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color legend-active"><i class="fa-solid fa-check"></i></div>
+                    <span>Active Support (Good to Go)</span>
+                </div>
+                 <div class="legend-item">
+                    <div class="legend-color legend-discontinued"><i class="fa-solid fa-info-circle"></i></div>
+                    <span>Discontinued BUT Supported</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-warning"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <span>Support Ending Soon (Plan Ahead!)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-end"><i class="fa-solid fa-ban"></i></div>
+                    <span>End of Support (May Cause Issues)</span>
+                </div>
+            </div>
+
+            <div class="search-box">
+                 <label for="deviceSearch" class="visually-hidden">Search Devices</label>
+                 <input type="text" id="deviceSearch" placeholder="Type device name (e.g., iPad Air 5, Galaxy Tab S8)..." aria-label="Search Devices" onkeyup="filterDevices()">
+            </div>
+
+            <div class="tabs">
+                <div class="tab-buttons" role="tablist">
+                     <button class="tab-button active" role="tab" aria-selected="true" aria-controls="ipadContent" id="ipadTab"><i class="fa-brands fa-apple"></i> iPads</button>
+                     <button class="tab-button" role="tab" aria-selected="false" aria-controls="iphoneContent" id="iphoneTab"><i class="fa-solid fa-mobile-screen-button"></i> iPhones</button>
+                     <button class="tab-button" role="tab" aria-selected="false" aria-controls="androidContent" id="androidTab"><i class="fa-brands fa-android"></i> Android</button>
+                     <button class="tab-button" role="tab" aria-selected="false" aria-controls="otherContent" id="otherTab"><i class="fa-solid fa-laptop"></i> Other</button>
+                     <button class="tab-button" role="tab" aria-selected="false" aria-controls="accessibilityContent" id="accessibilityTab"><i class="fa-solid fa-universal-access"></i> Accessibility</button>
+                </div>
+
+                <div id="ipadContent" class="tab-content active" role="tabpanel" aria-labelledby="ipadTab">
+                    <h2>Apple iPads</h2>
+                    <p>Sorted newest to oldest. iPads usually get updates for 6-8 years. <strong>Latest OS: iPadOS 18.x</strong></p>
+                    <table class="device-table" id="ipadTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Device Model</th>
+                                <th scope="col">Released</th>
+                                <th scope="col">Est. Max OS</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             <tr class="status-active">
+                                 <td>iPad Air (M3, 11"/13") <span class="status-new"></span></td> <td>Mar 2025</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-active"><i class="fa-solid fa-check"></i> <span>Active</span></span></td>
+                             </tr>
+                             <tr class="status-active">
+                                 <td>iPad (11th gen) <span class="status-new"></span></td> <td>Mar 2025</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-active"><i class="fa-solid fa-check"></i> <span>Active</span></span></td>
+                             </tr>
+                             <tr class="status-active">
+                                 <td>iPad Mini (7th gen) <span class="status-new"></span></td> <td>Oct 2024</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-active"><i class="fa-solid fa-check"></i> <span>Active</span></span></td>
+                             </tr>
+                             <tr class="status-active">
+                                 <td>iPad Pro (M4, 11"/13")</td> <td>May 2024</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-active"><i class="fa-solid fa-check"></i> <span>Active</span></span></td>
+                             </tr>
+                             <tr class="status-discontinued">
+                                 <td>iPad Air (M2, 11"/13")</td> <td>May 2024</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                             </tr>
+                             <tr class="status-discontinued">
+                                 <td>iPad (10th gen)</td> <td>Oct 2022</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                             </tr>
+                             <tr class="status-discontinued">
+                                 <td>iPad Pro (6th gen, M2)</td> <td>Oct 2022</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                             </tr>
+                             <tr class="status-discontinued">
+                                 <td>iPad Air (5th gen, M1)</td> <td>Mar 2022</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                             </tr>
+                              <tr class="status-discontinued">
+                                 <td>iPad (9th gen)</td> <td>Sep 2021</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                              </tr>
+                             <tr class="status-discontinued">
+                                 <td>iPad Mini (6th gen)</td> <td>Sep 2021</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                             </tr>
+                             <tr class="status-discontinued">
+                                 <td>iPad Pro (5th gen, M1)</td> <td>May 2021</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                             </tr>
+                             <tr class="status-discontinued">
+                                 <td>iPad Air (4th gen)</td> <td>Oct 2020</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                             </tr>
+                             <tr class="status-discontinued">
+                                 <td>iPad (8th gen)</td> <td>Sep 2020</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                             </tr>
+                             <tr class="status-discontinued">
+                                 <td>iPad Pro (4th gen, A12Z)</td> <td>Mar 2020</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                             </tr>
+                              <tr class="status-discontinued">
+                                 <td>iPad Mini (5th gen)</td> <td>Mar 2019</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                              </tr>
+                              <tr class="status-discontinued">
+                                 <td>iPad Air (3rd gen)</td> <td>Mar 2019</td> <td>iPadOS 18+</td>
+                                 <td><span class="status-badge badge-discontinued"><i class="fa-solid fa-info-circle"></i> <span>Disc. Supported</span></span></td>
+                              </tr>
+                            <tr class="status-warning">
+                                <td>iPad Pro (3rd gen, A12X)</td> <td>Oct 2018</td> <td>iPadOS 18</td>
+                                <td><span class="status-badge badge-warning"><i class="fa-solid fa-triangle-exclamation"></i> <span>Ends ~Fall 2025</span></span></td>
+                            </tr>
+                             <tr class="status-end">
+                                 <td>iPad (7th gen)</td> <td>Sep 2019</td> <td>iPadOS 17</td>
+                                 <td><span class="status-badge badge-end"><i class="fa-solid fa-ban"></i> <span>End of Support</span></span></td>
+                             </tr>
+                             <tr class="status-end">
+                                 <td>iPad (6th gen)</td> <td>Mar 2018</td> <td>iPadOS 17</td>
+                                 <td><span class="status-badge badge-end"><i class="fa-solid fa-ban"></i> <span>End of Support</span></span></td>
+                             </tr>
+                            <tr class="status-end">
+                                <td>iPad Pro (2nd gen, 10.5/12.9)</td> <td>Jun 2017</td> <td>iPadOS 17</td>
+                                <td><span class="status-badge badge-end"><i class="fa-solid fa-ban"></i> <span>End of Support</span></span></td>
+                            </tr>
+                             <tr class="status-end">
+                                 <td>iPad (5th gen)</td> <td>Mar 2017</td> <td>iPadOS 16</td>
+                                 <td><span class="status-badge badge-end"><i class="fa-solid fa-ban"></i> <span>End of Support
 <td><span class="status-badge badge-end"><i class="fa-solid fa-ban"></i> <span>End of Support</span></span></td>
                              </tr>
                             <tr class="status-end">
